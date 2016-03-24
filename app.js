@@ -77,17 +77,12 @@ const location = a => <div style={locationStyle}>Location: {a.location}</div>
 
 const empty = () => null
 
-// Object -> []
-
 const authorComponents = a => 
-  R.filter(
-    R.compose(R.not, R.isNil),
-    [
-      a.name ? name : anonymous,
-      a.email ? email : empty,
-      a.location ? location : empty
-    ].map(f => f(a))
-  )
+  R.liftN(2, R.call)([
+    a.name ? name : anonymous,
+    a.email ? email : empty,
+    a.location ? location : empty
+  ], [a]).filter(R.identity)
 
 const Author = (props) => (
   <div style={authorStyle}>
